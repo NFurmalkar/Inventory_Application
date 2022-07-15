@@ -1,0 +1,79 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+
+{% block cssblock %}
+<link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+<!---body block -->
+{% block bodyBlock %}
+
+<div class="container">
+    <div class="row justify-content-center">
+       
+        <div class="col-lg-4 text-center">    
+            <h1 class='text-white'>Inventory</h1>
+              <div class="form-login"></br>
+                <h4>Register</h4>
+                </br>
+                <div style="margin-top: -12px;">
+                  {% for message in messages %}
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                       {{ message }}
+                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                  {% endfor %}
+                </div>
+                <br>
+                <form method="POST" id="myForm">
+                  {% csrf_token %}
+                  <input type="text" id="InputfirstName"  name="firstname" class="form-control input-sm chat-input" value="{{formData.firstname}}" placeholder="First Name"/>
+                  <small id="errorfirstName"> </small>
+                  </br>
+                  <input type="text" id="InputlastName" name="lastName" class="form-control input-sm chat-input" value="{{formData.lastName}}" placeholder="Last Name"/>
+                  <small id="errorlastName"> </small>
+                  </br>
+                  <input type="email" id="Inputemail"  name="email" class="form-control input-sm chat-input" value="{{formData.email}}" placeholder="Email"/>
+                  <small id="erroremail"> </small>
+                  </br>
+                  <select class="form-control" id="Inputgender" name="gender" value="{{formData.gender}}">
+                      <option value="male" style="color: black;">Male</option>
+                      <option value="female" style="color: black;">Female</option>
+                  </select>
+                  <small id="errorgender"> </small>
+                  <br>
+                  <input type="password" id="Inputpassword" name="password" class="form-control input-sm chat-input" placeholder="Password"/>
+                  <small id="errorpassword"> </small>
+                  <br>
+                  <!-- <button onclick="getOTP()" class="btn btn-danger btn-md">GET OTP <i class="fa fa-sign-in"></i></button>
+                  <input type="text" id="Inputotp" name="otp" class="form-control input-sm chat-input" placeholder="Enter OTP"/>
+                  <small id="errorotp"> </small>
+                  <br>  -->
+                  
+                  <div class="wrapper">
+                          <span class="group-btn">
+                            <button type="submit" class="btn btn-danger btn-md">login <i class="fa fa-sign-in"></i></button>    
+                          </span>
+                  </div>
+            
+            
+                </form>
+            </div>
+        </div>
+    </div>
+    </br></br>
+    <!--footer-->
+    <div class="footer text-white text-center">
+        <p>Dont have an account?  <a href="/" >Login Now!</a> </p>
+    </div>
+    <!--//footer-->
+  </div>
+
+
+{% endblock %}
+
+<!---js block -->
+{% block jsblock %}
+<script src="{% static '/js/myjs/register.js' %}"> </script>
+
+{% endblock %}

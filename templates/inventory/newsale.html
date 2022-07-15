@@ -1,0 +1,203 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+{% load getName %}
+
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+
+{% endblock %}
+
+<!-------END CSSBLOCK-->
+
+<!-----body block -->
+{% block bodyBlock %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+      <h4 class="text-center alert alert-primary mt-3">Sell Product</h4>
+    </div>
+  </div>
+  <div class="row" style="margin-top: -34px;">
+        <form class="row g-3 needs-validation" id="myForm" method="POST">
+          {% csrf_token %}
+
+          <div class="col-md-2">
+            <label class="form-label">Product Name</label> 
+            {% if sellDataById.stockId %}
+              <select id="inputCustomerName" class="form-select" name="stockId" value="" onchange="getsalesdata()"> <!----onchange="location = this.value;"-->
+                <option value="{{sellDataById.stockId}}">{{sellDataById.stockId.purchaseId.productId|getSaleDetails}}</option>
+                <optgroup label="----------"></optgroup>
+              {% for productData in productData%}
+                <option value="{{productData.id}}">{{productData.purchaseId.productId|getSaleDetails}}</option>
+              {% endfor %}  
+              </select>
+            {% else %}
+              <select id="inputCustomerName" class="form-select" name="stockId" value="" onchange="getsalesdata()"> <!----onchange="location = this.value;"-->
+                <option value="noSelect" selected>Select Product </option> 
+                {% for productData in productData%}
+                  <option value="{{productData.id}}">{{productData.purchaseId.productId|getSaleDetails}}</option>
+                {% endfor %}  
+             </select>
+            {% endif %} 
+          <small id="errorSelectName" class=""> </small>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Customer Name</label> 
+              <select id="selectCustomerData" class="form-select" name="customerId" value="">
+                {% if sellDataById.customerId %}
+                  <option value="{{sellDataById.customerId}}" selected> {{sellDataById.customerId|getCustomerName}} </option> 
+                  <optgroup label="-------------"> </optgroup>
+                  {% for customerData in customerData%}
+                  <option value="{{customerData.id}}"> {{customerData.customerName}} </option>
+                  {% endfor %} 
+                {% else %}
+                  <option value="selectCustomerValue" selected>Select Customer </option> 
+                  {% for customerData in customerData%}
+                  <option value="{{customerData.id}}"> {{customerData.customerName}} </option>
+                  {% endfor %} 
+
+                {% endif %}
+             </select>
+          <small id="errorCustomerdata" class=""> </small>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Date</label>
+            {% if sellDataById.sellDate %}
+            <input type="date" class="form-control" name="sellDate" id="" value="{{sellDataById.sellDate|date:'Y-m-d'}}">
+            {% else %}
+            <input type="date" class="form-control" name="sellDate" id="salesDate" value="">
+            {% endif %}
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label"> Invoice</label>
+              <input type="text" class="form-control" name="invoice" id="invoice"  value="{{invoiceNum}}" readonly>
+              <small id="errorInvoice" class=""> </small>
+          </div>
+          <div class="col-md-1">
+            <label class="form-label">Rate</label>
+            <input type="number" class="form-control" name="rate" id="rate" value="{{sellDataById.rate}}" required readonly>
+            <small id="errorRate" class=""> </small>
+          </div>
+          
+          <div class="col-md-1">
+            <label class="form-label">Quantity</label>
+            {% if sellDataById.quantity %}
+            <input type="number" class="form-control" name="quantity" id="quantity" value="{{sellDataById.quantity}}" onkeyup="calculateTotal()" onclick="getAvailableQty()">
+            {% else %}
+            <input type="number" class="form-control" name="quantity" id="quantity" value="" onkeyup="calculateTotal()">
+            {% endif %}
+            <small id="errorquantity" class=""> </small>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Discount(%)</label>
+            <input type="number" class="form-control" name="discount" id="discount" value="{{sellDataById.discount}}" onkeyup="calculateTotal()">
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">CGST</label>
+            <input type="number" class="form-control" name="CGST" id="CGST" value="{{sellDataById.CGST}}" onkeyup="calculateTotal()">
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">IGST</label>
+            <input type="number" class="form-control" name="IGST" id="IGST" value="{{sellDataById.IGST}}" onkeyup="calculateTotal()">
+          </div>
+          
+          <div class="col-md-1">
+            <label class="form-label"><small>Taxable Amount</small></label>
+            <input type="number" class="form-control" name="taxableAmount" id="taxableAmount" value="{{sellDataById.taxableAmount}}" readonly>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Total Amount</label>
+            <input type="number" class="form-control" name="totalAmount" id="totalAmount" value="{{sellDataById.totalAmount}}" readonly required>
+          </div>     
+      </form>
+      <div class="d-grid gap-2 col-2 mx-auto mt-3">
+        {% if sellDataById %}
+        <button type="submit" id="submitval" onclick="formsubmit()" class="btn  btn-outline-primary ">Update</button>
+        {% else %}
+        <button type="submit" id="submitval" onclick="formsubmit()" class="btn  btn-outline-primary ">Save</button>
+        {% endif %}
+      </div>
+    
+  </div>
+
+<hr>
+  &nbsp;&nbsp;&nbsp;
+        <div class="col-lg-12">
+          <table class="table border">
+            <thead>
+              <tr>
+                 <th scope="col">Product Name</th>
+                 <th scope="col">Customer Name</th>
+                 <th scope="col">Date</th>
+                 <th scope="col">Invoice</th>
+                 <th scope="col">Rate</th>
+                 <th scope="col">Quantity</th>
+                 <th scope="col">Discount</th>
+                 <th scope="col">CGST</th>
+                 <th scope="col">IGST</th>
+                 <th scope="col">Taxable Amount</th>
+                 <th scope="col">Total Amount</th>
+                 <!--<th scope="col">Update</th>-->
+                 <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for sellData in sellData%}
+              <tr>
+                <td>{{sellData.stockId.purchaseId.productId|getSaleDetails}}</td>
+                <td>{{sellData.customerId|getCustomerName}}</td>
+                <td>{{sellData.sellDate|date:'d/n/Y'}}</td>
+                <td>{{sellData.invoice}}</td>
+                <td>{{sellData.rate}}</td>
+                <td>{{sellData.quantity}}</td>
+                <td>{{sellData.discount}}</td>
+                <td>{{sellData.CGST}}</td>
+                <td>{{sellData.IGST}}</td>
+                <td>{{sellData.taxableAmount}}</td>
+                <td>{{sellData.totalAmount}}</td>
+                <!--<td scope="col"><a href="/updatesell/{{sellData.id}}" class="btn btn-success">Update</a></td>-->
+                <td scope="col"><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{sellData.id}}"> Delete </button></td> 
+              </tr>
+              <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop-{{sellData.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-center" id="staticBackdropLabel"> Alert </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h3 style="color: red;">Do You want to Delete {{sellData.id}}</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <a href="#" class="btn btn-danger" data-bs-toggle="modal" > Delete </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            {% endfor %}    
+            </tbody>
+          
+          </table>       
+          {%include 'inventory/paginator.html' with page=sellData %}   
+          
+        </div>
+</div>
+
+
+
+{% endblock %}
+    
+<!-----JS block -->
+{% block jsblock %}
+  <script src="{% static 'js/myjs/newsale.js' %}"> </script>
+{% endblock %}

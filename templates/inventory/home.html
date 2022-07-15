@@ -1,0 +1,73 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+<!-------END CSSBLOCK-->
+
+<!-----body block -->
+{% block bodyBlock %}
+
+<div class="row">
+    <div class="container">
+        
+        <div class="content">
+            <h5 class="text-center">Total Customer</h5>
+          <h1 class=""></h1>
+          <h3>{{totalCustomer.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+    <div class="container" style="margin-left: 30%;">
+        <div class="content">
+            <h5 class="text-center">Total Product</h5>
+          <h1 class="text-center"></h1>
+          <h3>{{toalProduct.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+    <div class="container" style="margin-left: 60%;">
+        <div class="content">
+            <h5 class="text-center">Total Purchase</h5>
+          <h1 class="text-center"></h1>
+          <h3>{{totalPurchase.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="container" style="margin-top: 20%;">
+        <div class="content">
+            <h5 class="text-center">Total sell</h5>
+          <h1 class="text-center"></h1>
+          <h3>{{totalSell.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+
+    <div class="container" style="margin-top: 20%;margin-left: 30%;">
+        <div class="content">
+            <h5 class="text-center">Purchase Return</h5>
+          <h1 class="text-center"></h1>
+          <h3>{{totalPurchaseReturn.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+    <div class="container" style="margin-top: 20%;margin-left: 60%;">
+        <div class="content">
+            <h5 class="text-center">SellReturn</h5>
+          <h1 class="text-center"></h1>
+          <h3>{{totalSellReturn.id__count}}</h3>
+        </div>
+        <div class="flap"></div>
+    </div>
+    
+</div>
+
+
+{% endblock %}
+    
+<!-----body block -->

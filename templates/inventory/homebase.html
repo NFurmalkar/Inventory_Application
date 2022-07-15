@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/maincss.css' %}">
+    {% block cssblock %}
+
+    {% endblock %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/home">Home</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Master
+                </a>
+                <ul class="dropdown-menu active" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/product">Product</a></li>
+                  <li><a class="dropdown-item" href="/customer"> customer </a></li>
+                  <li><a class="dropdown-item" href="#">Another action</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/purchase">Purchase</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/newsale">Sales</a>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Return
+                </a>
+                <ul class="dropdown-menu active" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/returnPurchase">Purchase Return</a></li>
+                  <li><a class="dropdown-item" href="/returnSell">Sell Return</a></li>
+                </ul>
+              </li>
+              <!-- <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/stock">Stock</a>
+              </li> -->
+
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav me-2 ms-2">
+              <li><a class="btn btn-block btn-danger " href="/">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    
+
+    {% block bodyBlock %}
+
+    {% endblock %}
+</body>
+<script src="{% static 'js/bootstrap.min.js' %}"> </script>
+<script src="{% static 'js/popper/popper.js' %}"> </script>
+<script src="{% static 'js/myjs/main.js' %}"> </script>
+{% block jsblock %}
+
+{% endblock %}
+</html>

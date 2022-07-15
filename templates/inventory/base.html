@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/maincss.css' %}">
+    {% block cssblock %}
+
+    {% endblock %}
+</head>
+<body>
+    {% block bodyBlock %}
+
+    {% endblock %}
+</body>
+<script src="{% static 'js/bootstrap.min.js' %}"> </script>
+<script src="{% static 'js/popper/popper.js' %}"> </script>
+<script src="https://smtpjs.com/v3/smtp.js"> </script>
+{% block jsblock %}
+
+{% endblock %}
+</html>

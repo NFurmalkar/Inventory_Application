@@ -1,0 +1,60 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+
+<!------css-------->
+{% block cssblock %}
+<link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+<!------bodyBlock-------->
+{% block bodyBlock %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-offset-5 col-md-4 text-center">
+            <h1 class='text-white'>Inventory Application </h1>
+            {% for message in messages %}
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                   {{ message }}
+                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endfor %}
+              <div class="form-login"></br>
+                <h4>Secure Login</h4>
+                </br>
+                <form method="POST">
+                  {% csrf_token %}
+                  <input type="email" id="userName" name="email" class="form-control input-sm chat-input" placeholder="username" required/>
+                  </br></br>
+                  <input type="password" id="userPassword" name="password" class="form-control input-sm chat-input" placeholder="password" required/>
+                  </br></br>
+                  <div class="wrapper">
+                          <span class="group-btn">
+                              <button type="submit" class="btn btn-danger btn-md">Login <i class="fa fa-sign-in"></i></button>
+                          </span>
+                  </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    </br></br>
+    <div class="text-center">
+      <a href="/forgetpassword" >Forget Passsword</a>
+    </div>
+    </br>
+    <!--footer-->
+    <div class="footer text-white text-center">
+        <p>Dont have an account?  <a href="/register" >SignUp Now!</a> </p>
+    </div>
+    <!--//footer-->
+  </div>
+
+
+{% endblock %}
+
+
+
+<!------jsblock-------->
+{% block jsblock %}
+<script src="{% static '/js/myjs/main.js' %}"> </script>
+{% endblock %}

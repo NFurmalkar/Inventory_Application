@@ -1,0 +1,52 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+{% load getName %}
+
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+
+{% endblock %}
+<!-------END CSSBLOCK-->
+
+
+<!-----body block -->
+{% block bodyBlock %}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <h4 class="text-center alert alert-primary mt-3">Stock Product</h4>
+      </div>
+    </div>
+    <div class="row" style="margin-top: -10px;">
+        <div class="col-lg-6">
+            <table class="table border">
+              <thead>
+                <tr>
+                  <th scope="col">Stock Name</th>
+                  <th scope="col">Quantity</th>
+                
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in stockData %}
+                <tr>
+                  <td>{{i.purchaseId.productId.productName}}</td>
+                  <td>{{i.purchaseId.quantity}}</td>                  
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            {%include 'inventory/paginator.html' with page=customerDetail %}
+          </div>
+      
+    </div>
+  
+  </div>
+
+
+{% endblock %}
+
+<!-------->
+{% block jsblock %}
+{% endblock %}

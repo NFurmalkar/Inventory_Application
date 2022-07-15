@@ -1,0 +1,65 @@
+{% extends 'inventory/base.html' %}
+{% load static %}
+
+{% block cssblock %}
+<link rel="stylesheet" href="{% static '/css/login.css' %}">
+{% endblock %}
+
+<!---body block -->
+{% block bodyBlock %}
+
+<div class="container">
+    <div class="row justify-content-center">
+       
+        <div class="col-lg-4 text-center">    
+            <h1 class='text-white'>Inventory</h1>
+              <div class="form-login"></br>
+                <h4>OTP</h4>
+                </br>
+                <div style="margin-top: -12px;">
+                    {% if error_msg %}
+                    <b style="color: red;">{{error_msg}}</b>
+                    {% endif %}
+                </div>
+                <br>
+                <form method="POST">
+                  {% csrf_token %}
+                  <div style="margin-top: -12px;">
+                    {% for message in messages %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                         {{ message }}
+                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  <input type="text" id="OTP"  name="otp" class="form-control input-sm chat-input" value="" placeholder="Enter OTP" required/>
+                  <small id="errorfirstNam"> </small>
+                  </br>
+                  
+                  <div class="wrapper">
+                          <span class="group-btn">
+                            <button type="submit" class="btn btn-danger btn-md">Submit <i class="fa fa-sign-in"></i></button>    
+                          </span>
+                  </div> 
+                </form>
+            </div>
+        </div>
+    </div>
+    </br></br>
+    <!--footer-->
+    <div class="footer text-white text-center">
+        <p>Register Again  <a href="/register" >Register Again!</a> </p>
+    </div>
+    <!--//footer-->
+  </div>
+
+
+{% endblock %}
+
+
+
+
+{% block jsblock %}
+<script src="{% static '/js/myjs/register.js' %}"> </script>
+
+{% endblock %}

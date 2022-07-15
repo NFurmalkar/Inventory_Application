@@ -1,0 +1,117 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+
+{% endblock %}
+
+<!-------END CSSBLOCK-->
+
+<!-----body block -->
+{% block bodyBlock %}
+
+<div class="container-fluid">
+    <div class="row mt-2">
+        <div class="col-lg-4 border">
+            <h3 class="text-center">Customer</h3>
+            <hr>
+              <form method="POST" id="form">
+                {% csrf_token %}
+                  <div class="mb-3">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" class="form-control" id="customerName" name="customerName" value="{{customerData.customerName}}" placeholder="Customer name">
+                    <small id="errorCustomerName" class=""> </small>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    {% if customerData.address is None %}
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Address" value=" ">
+                    {% else %}
+                    <input type="text" class="form-control" id="address" name="address" placeholder="Address" value="{{customerData.address}}">
+                    {% endif %}
+                    <small id="errorAddress" class=""> </small>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Mobile Number</label>
+                    <input type="number" class="form-control" id="mobileNumber" name="mobileNumber" placeholder="Mobile Number" value="{{customerData.mobileNumber}}">
+                    <small id="errorMobileNumber" class=""> </small>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">GST Number</label>
+                    {% if customerData.GSTno is None %}
+                    <input type="text" class="form-control" id="gstno" name="GSTno" placeholder="GST Number" value="">
+                    {% else %}
+                    <input type="text" class="form-control" id="gstno" name="GSTno" placeholder="GST Number" value="{{customerData.GSTno}}">
+                    {% endif %}
+                    <small id="errorGSTNO" class=""> </small>
+                  </div>
+                  
+                  <div class="d-grid gap-2 col-4 mx-auto mb-3">
+                    <button type="submit" id="" class="btn  btn-outline-primary ">Submit</button>
+                </div>
+              </form>
+        </div>
+
+        &nbsp;&nbsp;&nbsp;
+        <div class="col-lg-6">
+          <table class="table border">
+            <thead>
+              <tr>
+                <th scope="col">Customer Name</th>
+                <th scope="col">Address</th>
+                <th scope="col">mobile Number</th>
+                <th scope="col">GST NO</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for customerDetail in customerDetail %}
+              <tr>
+                <td>{{customerDetail.customerName}}</td>
+                {% if customerDetail.address is None %} <td>-</td> {% else %} <td>{{customerDetail.address}}</td> {% endif %}
+
+                {% if customerDetail.mobileNumber is None %} <td>-</td> {% else %} <td>{{customerDetail.mobileNumber}}</td> {% endif %}
+
+                {% if customerDetail.GSTno is None %} <td>-</td> {% else %} <td>{{customerDetail.GSTno}}</td> {% endif %}
+                
+                <td><a href="/updateCustomer/{{customerDetail.id}}" class="btn btn-success">Update</a></td>
+                <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{customerDetail.id}}"> Delete </button></td> 
+                <!-- <td><a href="/deleteCustomer/{{customerDetail.id}}" id="deleteData" class="btn btn-danger">Delete</a></td> -->
+              </tr>
+              <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop-{{customerDetail.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-center" id="staticBackdropLabel"> Alert </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h3 style="color: red;">Do You want to Delete {{customerDetail.id}}</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <a href="/deleteCustomer/{{customerDetail.id}}" class="btn btn-danger" > Delete </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </tbody>
+          </table>
+          {%include 'inventory/paginator.html' with page=customerDetail %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+    
+<!-----body block -->
+
+<!------jsblock-------->
+{% block jsblock %}
+<script src="{% static '/js/myjs/customer.js'%}"></script>
+{% endblock %}

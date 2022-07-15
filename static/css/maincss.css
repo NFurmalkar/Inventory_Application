@@ -1,0 +1,35 @@
+.form-control.errors {
+    border-color: #dc3545;
+    border-width: 0.1rem;
+    border-style: solid;
+}
+.form-control.success {
+    border-color: #47b475;
+}
+
+.success {
+    border-color: #47b475;
+}
+
+.errors {
+    border-color: #dc3545;
+    border-width: 0.1rem;
+    border-style: solid;
+}
+
+/*---Hide input Number field arrow in HTML*/
+input::-webkit-outer-spin-button, 
+
+input::-webkit-inner-spin-button { 
+
+    -webkit-appearance: none; 
+
+    margin: 0; 
+
+} 
+
+input[type=number] { 
+
+    -moz-appearance: textfield; 
+
+} 

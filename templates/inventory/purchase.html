@@ -1,0 +1,327 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+
+{% load getName %}
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+
+{% endblock %}
+
+<!-------END CSSBLOCK-->
+
+<!-----body block -->
+{% block bodyBlock %}
+<div class="container-fluid">
+  <div class="row">
+     
+        <form class="row g-3 needs-validation" id="myform" method="POST">
+          {% csrf_token %}
+
+          {% if purchaseDetails %}
+            {% if getproductById.productName %}
+            <div class="col-md-2">
+            <label class="form-label">Product Name</label> 
+            <select id="inputCustomerName" class="form-select" name="productId" value="" onchange="location = this.value;">
+              <option value="{{getproductById.id}}" selected>{{getproductById.productName}}</option>
+              <optgroup label="-------------"> </optgroup>
+                {% for productData in productData%}
+                <option value="{{productData.id}}"> {{productData.productName}} </option>
+                {% endfor %} 
+              </select>
+              <small id="errorSelectName" class=""> </small>
+            </div>  
+              
+            {% else %}  
+
+            <div class="col-md-2">
+              <label class="form-label">Product Name</label> 
+                <select id="inputCustomerName" class="form-select" name="productId" value="" onchange="location = this.value;">
+                  <option value="{{purchaseDetails.productId}}">{{purchaseDetails.productId|getSaleDetails}}</option>
+                  <optgroup label="----------"> </optgroup>
+                  {% for productData in productData%}
+                    <option value="{{productData.id}}"> {{productData.productName}} </option>
+                  {% endfor %} 
+              </select>
+            <small id="errorSelectName" class=""> </small>
+            </div>
+          {% endif %}
+
+          {% else %}
+
+          <div class="col-md-2">
+            <label class="form-label">Product Name</label> 
+              <select id="inputCustomerName" class="form-select" name="productId" value="" onchange="location = this.value;">
+
+                {% if getproductById.productName %}
+                <option value="{{getproductById.id}}" selected>{{getproductById.productName}}</option>
+                <optgroup label="-------------"> </optgroup>
+                  {% for productData in productData%}
+                  <option value="{{productData.id}}"> {{productData.productName}} </option>
+                  {% endfor %} 
+
+                {% else %}
+                  <option value="noSelect" selected>Select Product </option> 
+                  {% for productData in productData%}
+                  <option value="{{productData.id}}"> {{productData.productName}} </option>
+                  {% endfor %} 
+                {% endif %}
+                
+             </select>
+          <small id="errorSelectName" class=""> </small>
+          </div>
+
+          {% endif %}
+
+
+          
+
+          <div class="col-md-2">
+            <label class="form-label">Customer Name</label> 
+              <select id="customerDataId" class="form-select" name="customerId" value="{{purchaseDetails}}">
+                {% if purchaseDetails %}
+                <option value="{{purchaseDetails.customerId}}">{{purchaseDetails.customerId|getCustomerName}}</option>
+                <optgroup label="------------"> </optgroup>
+                {% for customerData in customerData%}
+                  <option value="{{customerData.id}}"> {{customerData.customerName}} </option>
+                {% endfor %} 
+
+                {% else %}
+                  <option value="noSelect" selected>Select Customer </option> 
+                  {% for customerData in customerData%}
+                  <option value="{{customerData.id}}"> {{customerData.customerName}} </option>
+                  {% endfor %} 
+                  {% endif %}
+             </select>
+          <small id="errorCustomerdata" class=""> </small>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Date</label>
+            {% if purchaseDetails.purchaseDate %}
+            <input type="date" class="form-control" name="purchaseDate" id="" value="{{purchaseDetails.purchaseDate|date:'Y-m-d'}}">
+            {% else %}
+            <input type="date" class="form-control" name="purchaseDate" id="purchaseDate" value="">
+            {% endif %}
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label"> Invoice</label>
+              <input type="text" class="form-control" name="invoice" id="invoice"  value="{{purchaseDetails.invoice}}">
+              <small id="errorInvoice" class=""> </small>
+          </div>
+          <div class="col-md-1">
+            {% if purchaseDetails.rate %}
+              {% if getproductById.rate %}
+              <label class="form-label">Rate</label>
+              <input type="number" class="form-control" name="rate" id="rate" value="{{getproductById.rate}}" onclick="calculateTotalAmount()" placeholder="" required>
+              {% else %}
+                <label class="form-label">Rate</label>
+                <input type="number" class="form-control" name="rate" id="rate" value="{{purchaseDetails.rate}}" onclick="calculateTotalAmount()" placeholder="" required>
+              {% endif %}
+              
+            {% else %}
+            <label class="form-label">Rate</label>
+            <input type="number" class="form-control" name="rate" id="rate" value="{{getproductById.rate}}" onclick="calculateTotalAmount()" placeholder="" required>
+            {% endif %}
+            <small id="errorRate" class=""> </small>
+          </div>
+          
+          <div class="col-md-1">
+            <label class="form-label">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="quantity" onkeyup="calculateTotalAmount()" value="{{purchaseDetails.quantity}}" >
+            <small id="errorquantity" class=""> </small>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Discount(%)</label>
+            {% if purchaseDetails %}
+            <input type="number" class="form-control" name="discount" id="discount" value="{{purchaseDetails.discount}}" onkeyup="calculateTotalAmount()" placeholder="">
+            {% else %}
+            <input type="number" class="form-control" name="discount" id="discount" value="{{getproductById.discount}}" onkeyup="calculateTotalAmount()" placeholder="">
+            {% endif %}
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">CGST</label>
+            {% if purchaseDetails %}
+            <input type="number" class="form-control" name="CGST" id="CGST" value="{{purchaseDetails.CGST}}" onkeyup="calculateTotalAmount()" placeholder="">
+            {% else %}
+            <input type="number" class="form-control" name="CGST" id="CGST" value="{{getproductById.CGST}}" onkeyup="calculateTotalAmount()">
+            {% endif %}
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">IGST</label>
+            {% if purchaseDetails %}
+            <input type="number" class="form-control" name="IGST" id="IGST" value="{{purchaseDetails.IGST}}" onkeyup="calculateTotalAmount()" placeholder="">
+            {% else %}
+            <input type="number" class="form-control" name="IGST" id="IGST" value="{{getproductById.IGST}}" onkeyup="calculateTotalAmount()" >
+            {% endif %}
+          </div>
+          
+          <div class="col-md-1">
+            <label class="form-label"><small>Taxable Amount</small></label>
+            <input type="number" class="form-control" name="taxableAmount" id="taxableAmount" value="{{purchaseDetails.taxableAmount}}" readonly>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Total Amount</label>
+            <input type="number" class="form-control" name="totalAmount" id="totalAmount" value="{{purchaseDetails.totalAmount}}" readonly required>
+          </div>     
+      </form>
+      <div class="d-grid gap-2 col-2 mx-auto mt-3">
+        {% if purchaseDetails %}
+        <button type="submit" onclick="saveform()" id="submitval" class="btn  btn-outline-primary ">Update</button>
+        {% else %}
+        <button type="submit" onclick="saveform()" id="submitval" class="btn  btn-outline-primary ">Save</button>
+        {% endif %}
+      </div>
+    
+  </div>
+
+<hr>
+<form method="GET">
+  <div class="row justify-content-end mt-4">
+    <div class="col-lg-2">
+      <input type="date" class="form-control" name="startDate" id="startDate"  value="">
+    </div>
+    <div class="col-lg-2">
+      <input type="date" class="form-control" name="endDate" id="endDate" min="#startDate" value="">
+    </div>
+    
+    <div class="col-lg-2">
+      <button type="submit" class="btn btn-primary" onclick="addParam()">Apply Filter</button>
+    </div>
+  </div>
+</form>
+<small id="errorMsg"></small>
+
+  &nbsp;
+        <div class="col-lg-12">
+          <table class="table border">
+            <thead>
+              <tr>
+                <th scope="col">product Name</th>
+                <th scope="col">customer Name</th>
+                <th scope="col">purchase Date</th>
+                <th scope="col">invoice</th>
+                <th scope="col">Rate</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Discount</th>
+                <th scope="col">CGST</th>
+                <th scope="col">IGST</th>
+                <th scope="col">TotalAmount</th>
+                <th scope="col">taxableAmount</th>
+                <!--<th scope="col">Update</th>-->
+                <th scope="col">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for purchaseDetail in purchaseDetail%}
+              <tr>
+                <td>{{purchaseDetail.productId|getSaleDetails}}</td>
+                <td>{{purchaseDetail.customerId|getCustomerName}}</td>
+                <td>{{purchaseDetail.purchaseDate|date:'d/n/Y'}}</td>
+                <td>{{purchaseDetail.invoice}}</td>
+                <td>{{purchaseDetail.rate}}</td>
+                <td>{{purchaseDetail.quantity}}</td>
+                <td>{{purchaseDetail.discount}}</td>
+                <td>{{purchaseDetail.CGST}}</td>
+                <td>{{purchaseDetail.IGST}}</td>
+                <td>{{purchaseDetail.totalAmount}}</td>
+                <td>{{purchaseDetail.taxableAmount}}</td>
+                <!--<td><a href="/updatePurchase/{{purchaseDetail.id}}" class="btn btn-success">Update</a></td>--->
+                <td><button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop-{{purchaseDetail.id}}"> Delete </button></td>
+              </tr>
+              <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop-{{purchaseDetail.id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title text-center" id="staticBackdropLabel"> Alert </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <h3 style="color: red;">Do You want to Delete</h3>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                        <a href="/deletePurchase/{{purchaseDetail.id}}" class="btn btn-danger" data-bs-toggle="modal" > Delete </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+            </tbody>
+            <tr>
+              <td colspan="4"><h4 style="margin-left:20px" class="text-danger">Total </h4></td>
+              <td><p>{{totalSum.rate__sum}}</p></td>
+              <td colspan="2"><p>{{totalSum.quantity__sum}}</p></td>
+              <td >{{totalSum.CGST__sum}}</td>
+              <td>{{totalSum.IGST__sum}}</td>
+              <td>{{totalSum.totalAmount__sum}}</td>
+              <td>{{totalSum.taxableAmount__sum}}</td>
+            </tr>
+          </table>          
+          
+        </div>
+        {%include 'inventory/paginator.html' with page=purchaseDetail %}
+</div>
+
+
+
+
+
+<!-- 
+<div class="container-fluid">
+    <div class="row mt-2">
+        <div class="col-lg-3 border">
+            <h3 class="text-center">Purchase</h3>
+            <hr>
+              <form id="myform" method="POST">
+                {% csrf_token %}
+                  <div class="mb-3">
+                    <div class="form-group">
+                        <label class="form-label">Product Name</label> 
+                          <select id="inputCustomerName" class="form-select" name="productId" value="">
+                            <option value="noSelect" selected>Select Product </option> 
+                            {% for productData in productData%}
+                              <option value="{{productData.id}}"> {{productData.productName}} </option>
+                            {% endfor %} 
+                          </select>
+                          <small id="errorSelectName" class=""> </small>
+                    </div> 
+                    <br>
+                    <label class="form-label"> Invoice</label>
+                    <input type="text" class="form-control" name="invoice" id="invoice" placeholder="">
+                    <small id="errorInvoice" class=""> </small>
+                    <br>
+                    <label class="form-label">Rate</label>
+                    <input type="number" class="form-control" name="rate" id="rate" onkeyup="calculateTotalAmount()" placeholder="" required>
+                    <small id="errorRate" class=""> </small>
+                    <br>
+                    <label class="form-label">Quantity</label>
+                    <input type="number" class="form-control" name="quantity" id="quantity" onkeyup="calculateTotalAmount()" placeholder="" >
+                    <small id="errorquantity" class=""> </small>
+                    <br>
+                    <label class="form-label">Total Amount</label>
+                    <input type="number" class="form-control" name="totalAmount" id="totalAmount" placeholder="" readonly>
+                  </div>
+                  
+                  <div class="d-grid gap-2 col-4 mx-auto mb-3">
+                    <button type="submit" onclick="saveform()" id="submitval" class="btn  btn-outline-primary ">Submit</button>
+                </div>
+              </form>
+        </div>
+    </div>
+</div>
+ -->
+
+{% endblock %}
+    
+<!-----body block -->
+{% block jsblock %}
+
+<script src="{% static 'js/myjs/purchase.js' %}"> </script>
+
+{% endblock %}

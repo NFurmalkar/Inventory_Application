@@ -1,0 +1,138 @@
+{% extends 'inventory/homebase.html'%}
+{% load static %}
+{% load getName %}
+
+<!-------START CSSBLOCK-->
+{% block cssblock %}
+
+{% endblock %}
+<!-------END CSSBLOCK-->
+
+<!-----body block -->
+{% block bodyBlock %}
+
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-lg-4">
+      <h4 class="text-center alert alert-success mt-3">
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="col-md-12">
+            <label class="form-label"> Enter Invoice Number</label>
+              <input type="text" class="form-control" name="invoice" id="invoice"  value="" placeholder="Enter Invoice Number" required>
+              <small id="errorInvoice" class=""> </small>
+          </div>
+          <div class="d-grid gap-2 col-4 mx-auto mt-3">
+            <button type="submit" id="submitval" class="btn btn-outline-success ">Search</button>
+          </div>
+        </form> 
+      </h4>
+      
+      {% for messages in messages %}
+      {% if messages %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ messages }}
+        <button type="button" id="btn" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% if getStockData %}
+<hr>
+<div class="container-fluid mt-5">
+  <div class="row" style="margin-top: -34px;">
+        <form class="row g-3 needs-validation" id="myForm" method="POST" action="/returnPurchaseAndUpdate/">
+          {% csrf_token %}
+          <div class="col-md-2">
+            <label class="form-label">Product Name</label> 
+            <select id="inputProductName" class="form-select" name="purchaseReturnId" value="" onchange="getdata()"> <!----onchange="location = this.value;"-->
+            {% for getStockData in getStockData%}
+              <option value="{{getStockData.id}}">{{getStockData.purchaseId.productId|getSaleDetails}}</option>
+            {% endfor %}  
+            </select>
+          </div>  
+
+          <div class="col-md-2">
+            <label class="form-label">Customer Name</label> 
+            <select id="selectCustomerData" class="form-select" name="custNameId" value="" readonly>
+              {% for getStockData in getStockData%}
+              <option value="{{getStockData.purchaseId.customerId}}"> {{getStockData.purchaseId.customerId|getCustomerName}} </option>
+              {% endfor %} 
+           </select>
+          <small id="errorCustomerdata" class=""> </small>
+          </div>
+
+          <div class="col-md-2">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control" name="purchaseReturnDate" id="preturnDate" value="">
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label"> Invoice</label>
+              <input type="text" class="form-control" name="invoice" id="invoiceNo"  value="" readonly>
+              <small id="errorInvoice" class=""> </small>
+          </div>
+
+          <!-- <div class="col-md-1">
+            <label class="form-label">Rate</label>
+            <input type="number" class="form-control" name="rate" id="rate" value="" required readonly>
+            <small id="errorRate" class=""> </small>
+          </div> -->
+          
+          <div class="col-md-1">
+            <label class="form-label">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="quantity" value="" readonly>
+            <small id="" class=""> </small>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Return Qty</label>
+            <input type="number" class="form-control" name="returnQuantity" id="returnQuantity" value="" onkeyup="calculate()" required>
+            <small id="errorquantity" class=""> </small>
+          </div>
+
+          <!-- <div class="col-md-1">
+            <label class="form-label">Discount(%)</label>
+            <input type="number" class="form-control" name="discount" id="discount" value="" readonly>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">CGST</label>
+            <input type="number" class="form-control" name="CGST" id="CGST" value="" readonly>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">IGST</label>
+            <input type="number" class="form-control" name="IGST" id="IGST" value="" readonly>
+          </div>
+          
+          <div class="col-md-1">
+            <label class="form-label"><small>Taxable Amount</small></label>
+            <input type="number" class="form-control" name="taxableAmount" id="taxableAmount" value="" readonly>
+          </div>
+
+          <div class="col-md-1">
+            <label class="form-label">Total Amount</label>
+            <input type="number" class="form-control" name="totalAmount" id="totalAmount" value="" readonly required>
+          </div>     -->
+          
+      </form>
+      
+      <div class="d-grid gap-2 col-2 mx-auto mt-3">
+        <button type="submit" onclick="saveform()" id="submitId" class="btn  btn-outline-primary ">Save</button>
+      </div> 
+  </div>
+</div>  
+{% endif %}
+  
+
+{% endblock %}
+
+<!-------->
+{% block jsblock %}
+<script src="{% static 'js/myjs/purchasereturn.js' %}"> </script>
+{% endblock %}
